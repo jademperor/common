@@ -3,17 +3,17 @@ package utils
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 
-	"github.com/yeqown/gateway/logger"
-	"github.com/yeqown/server-common/code"
+	"github.com/jademperor/common/pkg/code"
 )
 
 func response(w http.ResponseWriter, s string) {
-	logger.Logger.Info(s)
+	log.Println(s)
 	_, err := io.WriteString(w, s)
 	if err != nil {
-		logger.Logger.Errorf("response err: %s", err.Error())
+		log.Printf("Error: response err: %s\n", err.Error())
 	}
 }
 
@@ -27,7 +27,7 @@ func ResponseJSON(w http.ResponseWriter, i interface{}) {
 	bs, err := json.Marshal(i)
 	if err != nil {
 		bs, _ = json.Marshal(code.NewCodeInfo(code.CodeSystemErr, err.Error()))
-		logger.Logger.Errorf("get an err: %s", err.Error())
+		log.Printf("Error: get an err: %s\n", err.Error())
 	}
 
 	// set header
