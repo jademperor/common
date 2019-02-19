@@ -11,16 +11,6 @@ import (
 // Entity ....
 type Entity = logrus.Logger
 
-var (
-	// DefaultEntity is default logger only output to os.Stdout
-	DefaultEntity = logrus.New()
-)
-
-// initialize default logger
-func init() {
-	DefaultEntity.Formatter = &logrus.JSONFormatter{}
-}
-
 // NewJSONLogger init logger to set filepath and format
 func NewJSONLogger(logPath, filename, lv string) (*Entity, error) {
 	return newLogger(logPath, filename, lv, jsonType)
