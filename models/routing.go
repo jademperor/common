@@ -1,4 +1,4 @@
-package configs
+package models
 
 // Routing is a stategy to proxy some request into specified cluster
 type Routing struct {

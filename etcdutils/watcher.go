@@ -67,11 +67,11 @@ func (w *Watcher) Quit() {
 }
 
 // NewWatcher ...
-func NewWatcher(addrs []string, duration time.Duration, rootKey string) *Watcher {
-	kapi, err := Connect(addrs...)
-	if err != nil {
-		panic(err)
-	}
+func NewWatcher(kapi client.KeysAPI, duration time.Duration, rootKey string) *Watcher {
+	// kapi, err := Connect(addrs...)
+	// if err != nil {
+	// 	panic(err)
+	// }
 	return &Watcher{
 		mutex:          &sync.RWMutex{},
 		Kapi:           kapi,

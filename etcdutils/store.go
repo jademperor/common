@@ -96,3 +96,7 @@ func (s *EtcdStore) Existed(k string) bool {
 func (s *EtcdStore) Expire(k string) error {
 	return s.Set(k, "", 1*time.Millisecond)
 }
+
+// // RangeDirectory get a Node(dir) all children keys
+// func RangeDirectory(root string) (keys []string, err error) {
+// }

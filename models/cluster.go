@@ -1,4 +1,4 @@
-package configs
+package models
 
 import (
 	"net/url"
@@ -8,8 +8,8 @@ import (
 )
 
 type healthCheck struct {
-	NeedCheck bool
-	Addr      url.URL
+	NeedCheck bool    `json:"need_check"`
+	URI       url.URL `json:"uri"`
 }
 
 // TODO:
@@ -20,12 +20,12 @@ func (hc *healthCheck) Check() (alive bool) {
 
 // ServerInstance ....
 type ServerInstance struct {
-	Idx         string       `json:"idx"`
-	Name        string       `json:"name"`
-	Addr        string       `json:"addr"`
-	Weight      int          `json:"weight"`
-	HealthCheck *healthCheck `json:"health_check"`
-	// Group       string       `json:"group"`
+	Idx       string `json:"idx"`
+	Name      string `json:"name"`
+	Addr      string `json:"addr"`
+	Weight    int    `json:"weight"`
+	ClusterID string `json:"cluster_id"`
+	// HealthCheck *healthCheck `json:"health_check"`
 }
 
 // W for github.com/jademperor/common/pkg/round-roubin.ServerCfgInterface

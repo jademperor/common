@@ -7,7 +7,8 @@ import (
 
 func Test_Watcher(t *testing.T) {
 	addrs := []string{"http://127.0.0.1:2377", "http://127.0.0.1:2378", "http://127.0.0.1:2379"}
-	watcher := NewWatcher(addrs, 1*time.Second, "/root/")
+	kapi, _ := Connect(addrs...)
+	watcher := NewWatcher(kapi, 1*time.Second, "/root/")
 
 	go watcher.Watch(func(op OpCode, k, v string) {
 		t.Logf("change: op: %d, k: %s, v: %s", op, k, v)

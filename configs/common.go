@@ -4,21 +4,15 @@ const (
 	// TIMEOUT string for timeout handler response
 	TIMEOUT = "timeout"
 
-	// ClustersKey and the tree like: /clusters/{clusterID}/{serverID}
-	ClustersKey = "/clusters/"
+	ClustersKey = "/clusters/" // ClustersKey and the tree like: /clusters/{clusterID}/{serverID}
+	APIsKey     = "/apis/"     // APIsKey configs of API config /apis/{apiCfgID}
+	RoutingsKey = "/routings/" // RoutingsKey configs of routing /routings/{routingID}
 
-	// PluginsKey and the tree like: /plugins/{pluginNamespace}/{key1}/{key2}/...
-	PluginsKey = "/plugins/"
-	// RbacKey "rbac/" means the root key, it contains "users/" "roles/" "permissions/"
-	RbacKey = "rbac/"
-	// RbacUsersKey users/
-	RbacUsersKey = "users/"
-	// RbacRolesKey roles/
-	RbacRolesKey = "roles/"
-	// RbacPermissionKey permission/
-	RbacPermissionKey = "permission/"
-	// CacheKey "cache/" means the root key
-	CacheKey = "cache/"
+	CacheKey          = "/plugins/cache/" // CacheKey "cache/" means the root key
+	RbacKey           = "/plugins/rbac/"  // RbacKey "rbac/" means the root key, it contains "users/" "roles/" "permissions/"
+	RbacUsersKey      = "users/"          // RbacUsersKey users/
+	RbacRolesKey      = "roles/"          // RbacRolesKey roles/
+	RbacPermissionKey = "permission/"     // RbacPermissionKey permission/
 )
 
 /*

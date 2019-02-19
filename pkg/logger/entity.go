@@ -21,36 +21,63 @@ func init() {
 	DefaultEntity.Formatter = &logrus.JSONFormatter{}
 }
 
-// NewJSONLogger ...
-// init logger to set filepath and format
+// NewJSONLogger init logger to set filepath and format
 func NewJSONLogger(logPath, filename, lv string) (*Entity, error) {
+	return newLogger(logPath, filename, lv, jsonType)
+}
+
+// NewTextLogger ...
+func NewTextLogger(logPath, filename, lv string) (*Entity, error) {
+	return newLogger(logPath, filename, lv, textType)
+}
+
+type formaterType uint8
+
+const (
+	jsonType formaterType = iota + 1
+	textType
+)
+
+func newLogger(logPath, filename, lv string, t formaterType) (*Entity, error) {
 	logger := logrus.New()
 	logger.AddHook(NewHook())
 
-	logger.Formatter = &logrus.JSONFormatter{}
+	switch t {
+	case jsonType:
+		logger.Formatter = &logrus.JSONFormatter{}
+	case textType:
+		logger.Formatter = &logrus.TextFormatter{}
+	default:
+		logger.Formatter = &logrus.TextFormatter{}
+	}
 
-	level, err := logrus.ParseLevel(lv)
-	if err != nil {
+	var (
+		level logrus.Level
+		err   error
+	)
+	if level, err = logrus.ParseLevel(lv); err != nil {
 		return nil, err
 	}
 	logger.SetLevel(level)
 
-	fd, err := os.OpenFile(
-		path.Join(logPath, filename),
-		os.O_CREATE|os.O_APPEND|os.O_WRONLY,
-		0644,
-	)
+	fd, err := ensureLogfile(logPath, filename)
 	if err != nil {
-		if os.IsNotExist(err) {
-			if os.MkdirAll(logPath, 0777) != nil {
-				return nil, err
-			}
-			goto Finally
-		}
 		return nil, err
 	}
-
-Finally:
 	logger.Out = io.MultiWriter(os.Stdout, fd)
 	return logger, nil
+}
+
+func ensureLogfile(dir, filename string) (fd *os.File, err error) {
+	fd, err = os.OpenFile(path.Join(dir, filename), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil && os.IsNotExist(err) {
+		// folder not existed
+		if os.MkdirAll(dir, 0777) != nil {
+			return nil, err
+		}
+		// reopen
+		fd, err = os.OpenFile(path.Join(dir, filename), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+		return
+	}
+	return
 }
