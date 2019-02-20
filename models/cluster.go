@@ -58,6 +58,13 @@ func NewCluster(servers []*ServerInstance) *Cluster {
 	return cls
 }
 
+// ClusterOption be saved in server instance type nodes
+// remember to add this item while setting and read it while loading
+type ClusterOption struct {
+	Idx  string `json:"idx"`
+	Name string `json:"name"`
+}
+
 // Cluster include ServerInstance to proxy
 type Cluster struct {
 	Idx      string `json:"idx"`

@@ -13,7 +13,7 @@ type API struct {
 
 // APICombination ...
 type APICombination struct {
-	Idx             string `json:"idx"`
+	// Idx             string `json:"idx"`
 	Path            string `json:"path"`
 	Field           string `json:"field"`
 	Method          string `json:"method"`

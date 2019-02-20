@@ -7,44 +7,44 @@ import (
 	"go.etcd.io/etcd/client"
 )
 
-var (
-	_ Store = &EtcdStore{}
-)
+// var (
+// 	_ Store = &EtcdStore{}
+// )
 
 // Store for etcd to provide simple API
-type Store interface {
-	// Get load value from store
-	Get(key string) (string, error)
+// type Store interface {
+// 	// Get load value from store
+// 	Get(key string) (string, error)
 
-	// create or update a key with value,
-	// if no expire option, set the expire as 0
-	Set(key, v string, expire time.Duration) error
+// 	// create or update a key with value,
+// 	// if no expire option, set the expire as 0
+// 	Set(key, v string, expire time.Duration) error
 
-	// delete a key from store
-	Delete(key string) error
+// 	// delete a key from store
+// 	Delete(key string) error
 
-	// judge a key existed or not
-	Existed(key string) bool
+// 	// judge a key existed or not
+// 	Existed(key string) bool
 
-	// expire a key
-	Expire(key string) error
-}
+// 	// expire a key
+// 	Expire(key string) error
+// }
 
 // NewEtcdStore generate a EctdStore
-func NewEtcdStore(addrs []string) (Store, error) {
+func NewEtcdStore(addrs []string) (*EtcdStore, error) {
 	kapi, err := Connect(addrs...)
 	if err != nil {
 		return nil, err
 	}
 	return &EtcdStore{
-		kapi:              kapi,
+		Kapi:              kapi,
 		opTimeoutDuration: 2 * time.Second,
 	}, nil
 }
 
 // EtcdStore a Store providing enough operation to manage data
 type EtcdStore struct {
-	kapi              client.KeysAPI
+	Kapi              client.KeysAPI
 	opTimeoutDuration time.Duration
 	// other options
 }
@@ -54,7 +54,7 @@ func (s *EtcdStore) Get(k string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), s.opTimeoutDuration)
 	defer cancel()
 
-	resp, err := s.kapi.Get(ctx, k, nil)
+	resp, err := s.Kapi.Get(ctx, k, nil)
 	if err != nil {
 		return "", err
 	}
@@ -67,16 +67,25 @@ func (s *EtcdStore) Set(k, v string, expire time.Duration) error {
 	ctx, cancel := context.WithTimeout(context.Background(), s.opTimeoutDuration)
 	defer cancel()
 	opt := &client.SetOptions{TTL: expire}
-	_, err := s.kapi.Set(ctx, k, v, opt)
+	_, err := s.Kapi.Set(ctx, k, v, opt)
 	return err
 }
 
 // Delete func to implement the Store interface Delete method
-func (s *EtcdStore) Delete(k string) error {
+func (s *EtcdStore) Delete(k string, recursive bool) error {
 	ctx, cancel := context.WithTimeout(context.Background(), s.opTimeoutDuration)
 	defer cancel()
 
-	_, err := s.kapi.Delete(ctx, k, nil)
+	var delOpt *client.DeleteOptions
+	delOpt = &client.DeleteOptions{
+		Recursive: recursive,
+	}
+
+	// if !recursive {
+	// 	delOpt = nil
+	// }
+
+	_, err := s.Kapi.Delete(ctx, k, delOpt)
 	if err != nil {
 		return err
 	}
@@ -96,7 +105,3 @@ func (s *EtcdStore) Existed(k string) bool {
 func (s *EtcdStore) Expire(k string) error {
 	return s.Set(k, "", 1*time.Millisecond)
 }
-
-// // RangeDirectory get a Node(dir) all children keys
-// func RangeDirectory(root string) (keys []string, err error) {
-// }

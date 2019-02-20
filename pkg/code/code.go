@@ -21,17 +21,17 @@ const (
 	// CodeIllegeOP ...
 	CodeIllegeOP
 	// ErrNoSuchCode ...
-	ErrNoSuchCode = "错误码未定义"
+	ErrNoSuchCode = "error code undefined"
 )
 
 var messages = map[int]string{
-	CodeOk:               "成功",
-	CodeParamInvalid:     "参数非法",
-	CodeSystemErr:        "系统错误",
-	CodeNoPermission:     "没有权限",
-	CodeServerTimeout:    "服务超时",
-	CodeResourceNotFound: "资源未找到",
-	CodeIllegeOP:         "非法操作",
+	CodeOk:               "success",
+	CodeParamInvalid:     "params invalid",
+	CodeSystemErr:        "system error",
+	CodeNoPermission:     "no permission",
+	CodeServerTimeout:    "server timeout",
+	CodeResourceNotFound: "resource not found",
+	CodeIllegeOP:         "operation illegal",
 }
 
 // CodeInfo define a CodeInfo type
