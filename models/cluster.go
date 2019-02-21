@@ -1,37 +1,10 @@
 package models
 
 import (
-	"net/http"
-	// "net/url"
-	"log"
 	"sync"
-	"time"
 
 	roundrobin "github.com/jademperor/common/pkg/round-robin"
 )
-
-// HealthChecker ...
-type HealthChecker struct {
-	client    *http.Client
-	TargetURL string
-}
-
-// Check server instance is alive or not.
-// HTTP response StatusOK(200) marked as success
-func (hc *HealthChecker) Check() (alive bool) {
-
-	if hc.client == nil {
-		hc.client = &http.Client{Timeout: 5 * time.Second}
-	}
-
-	resp, err := hc.client.Get(hc.TargetURL)
-	if err != nil || resp.StatusCode != http.StatusOK {
-		log.Printf("got err: %v, and status code: %d \n", err, resp.StatusCode)
-		return false
-	}
-
-	return true
-}
 
 // ServerInstance ....
 type ServerInstance struct {
@@ -41,7 +14,8 @@ type ServerInstance struct {
 	Weight          int    `json:"weight"`
 	ClusterID       string `json:"cluster_id"`
 	NeedCheckHealth bool   `json:"need_check_health"`
-	hchecker        *HealthChecker
+	HealthCheckURL  string `json:"health_check_url"`
+	IsAlive         bool   `json:"is_alive"`
 }
 
 // W for github.com/jademperor/common/pkg/round-roubin.ServerCfgInterface

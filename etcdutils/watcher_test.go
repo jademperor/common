@@ -20,7 +20,7 @@ func Test_Watcher(t *testing.T) {
 	store.Set("/root/foor", "bar", -1)
 	store.Set("/root/foo/bar", "bar2", -1)
 	store.Set("/root/foor", "changed bar", -1)
-	store.Delete("/root/foor")
+	store.Delete("/root/foor", true)
 	store.Set("/other_root/foo", "other bar, should not be showed", -1)
 
 	time.Sleep(5 * time.Second)
