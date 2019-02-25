@@ -8,7 +8,7 @@ type API struct {
 	TargetClusterID string            `json:"target_cluster_id"`
 	RewritePath     string            `json:"rewrite_path"`
 	NeedCombine     bool              `json:"need_combine"`
-	CombineReqCfgs  []*APICombination `json:"api_combination"`
+	CombineReqCfgs  []*APICombination `json:"combinations"`
 }
 
 // APICombination ...
