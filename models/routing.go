@@ -4,6 +4,6 @@ package models
 type Routing struct {
 	Idx             string `json:"idx"`
 	Prefix          string `json:"prefix"`
-	ClusterID       string `json:"cluster_id"`
+	ClusterID       string `json:"target_cluster_id"`
 	NeedStripPrefix bool   `json:"need_strip_prefix"`
 }
