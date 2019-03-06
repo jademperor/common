@@ -62,3 +62,16 @@ func TestNewEtcdStore(t *testing.T) {
 		})
 	}
 }
+
+func TestIter(t *testing.T) {
+	addrs := []string{"http://127.0.0.1:2379"}
+	store, err := NewEtcdStore(addrs)
+	if err != nil {
+		t.Errorf("NewEtcdStore() error = %v", err)
+		return
+	}
+	store.Iter("/clusters/", 2, func(k, v string, dir bool) {
+		t.Logf("key: %s, val: %s, dir: %v", k, v, dir)
+	})
+	// t.Fail()
+}
