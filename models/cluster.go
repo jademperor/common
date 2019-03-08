@@ -24,8 +24,10 @@ func (ins *ServerInstance) W() int {
 }
 
 // NewCluster to generate a Cluster in memory
-func NewCluster(servers []*ServerInstance) *Cluster {
+func NewCluster(idx, name string, servers []*ServerInstance) *Cluster {
 	cls := &Cluster{
+		Idx:   idx,
+		Name:  name,
 		mutex: &sync.RWMutex{},
 	}
 	cls.LoadServers(servers)

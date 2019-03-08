@@ -1,5 +1,9 @@
 package roundroubin
 
+import (
+	"sync"
+)
+
 // ServerCfgInterface ...
 type ServerCfgInterface interface {
 	// W means weight
@@ -8,6 +12,8 @@ type ServerCfgInterface interface {
 
 // Balancer ...
 type Balancer struct {
+	mutex sync.RWMutex
+
 	serverWeights map[int]int // host and weight
 	maxWeight     int         // 0
 	maxGCD        int         // 1
@@ -20,6 +26,7 @@ type Balancer struct {
 // Notice: https://github.com/golang/go/wiki/InterfaceSlice
 func NewBalancer(servers []ServerCfgInterface) *Balancer {
 	bla := &Balancer{
+		mutex:         sync.RWMutex{},
 		serverWeights: make(map[int]int),
 		maxWeight:     0,
 		maxGCD:        1,
@@ -45,6 +52,9 @@ func NewBalancer(servers []ServerCfgInterface) *Balancer {
 
 // Distribute 均衡调度算法调度
 func (bla *Balancer) Distribute() int {
+	bla.mutex.Lock()
+	defer bla.mutex.Unlock()
+
 	for true {
 		bla.i = (bla.i + 1) % bla.lenOfSW
 
