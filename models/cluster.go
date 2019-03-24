@@ -16,6 +16,9 @@ type ServerInstance struct {
 	NeedCheckHealth bool   `json:"need_check_health"`
 	HealthCheckURL  string `json:"health_check_url"`
 	IsAlive         bool   `json:"is_alive"`
+	// breaker
+	OpenBreaker    bool            `json:"open_breaker"`
+	BreakerSetting *BreakerSetting `json:"breaker_setting"`
 }
 
 // W for github.com/jademperor/common/pkg/round-roubin.ServerCfgInterface

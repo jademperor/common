@@ -50,11 +50,15 @@ func newLogger(logPath, filename, lv string, t formaterType) (*Entity, error) {
 	}
 	logger.SetLevel(level)
 
-	fd, err := ensureLogfile(logPath, filename)
-	if err != nil {
-		return nil, err
+	if filename != "" {
+		fd, err := ensureLogfile(logPath, filename)
+		if err != nil {
+			return nil, err
+		}
+		logger.Out = io.MultiWriter(os.Stdout, fd)
+	} else {
+		logger.Out = os.Stdout
 	}
-	logger.Out = io.MultiWriter(os.Stdout, fd)
 	return logger, nil
 }
 
